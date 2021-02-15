@@ -39,10 +39,15 @@ final class SlackInputBar: InputBarAccessoryView {
             makeButton(named: "ic_library")
                 .onSelected {
                     $0.tintColor = .systemBlue
-                    let imagePicker = UIImagePickerController()
-                    imagePicker.delegate = self
-                    imagePicker.sourceType = .photoLibrary
-                    (UIApplication.shared.delegate as? AppDelegate)?.window?.rootViewController?.present(imagePicker, animated: true, completion: nil)
+//                    let imagePicker = UIImagePickerController()
+//                    imagePicker.delegate = self
+//                    imagePicker.sourceType = .photoLibrary
+//                    (UIApplication.shared.delegate as? AppDelegate)?.window?.rootViewController?.present(imagePicker, animated: true, completion: nil)
+                    let testVc = UIViewController()
+                    testVc.view.frame = UIScreen.main.bounds
+                    testVc.view.backgroundColor = .yellow
+                    (UIApplication.shared.delegate as? AppDelegate)?.window?.rootViewController?.present(testVc, animated: true, completion: nil)
+                    
             },
             sendButton
                 .configure {
@@ -116,6 +121,7 @@ final class SlackInputBar: InputBarAccessoryView {
                 $0.tintColor = UIColor.lightGray
             }.onTouchUpInside { _ in
                 print("Item Tapped")
+                
         }
     }
     
