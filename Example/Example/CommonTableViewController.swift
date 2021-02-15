@@ -172,14 +172,15 @@ extension CommonTableViewController: InputBarAccessoryViewDelegate {
     
     func inputBar(_ inputBar: InputBarAccessoryView, didChangeIntrinsicContentTo size: CGSize) {
         // Adjust content insets
-        print(size)
+        print(#function, inputBar.inputTextView.numberOfLines)
         tableView.contentInset.bottom = size.height + 300 // keyboard size estimate
     }
     
     func inputBar(_ inputBar: InputBarAccessoryView, textViewTextDidChangeTo text: String) {
-        
+        //print(#function, inputBar.inputTextView.frame, inputBar.inputTextView.lineCount)
+
         let textRange = inputBar.inputTextView.selectedRange
-        print("text:", text, "textRange:", textRange)
+        //print("text:", text, "textRange:", textRange)
 
         guard autocompleteManager.currentSession != nil, autocompleteManager.currentSession?.prefix == "#" else { return }
         // Load some data asyncronously for the given session.prefix
@@ -196,8 +197,7 @@ extension CommonTableViewController: InputBarAccessoryViewDelegate {
             }
         }
     }
-    
-    
+
     func getCursorPosition(_ textView: UITextView) -> String.Index? {
         if let selectedRange = textView.selectedTextRange {
             let cursorPosition = textView.offset(from: textView.beginningOfDocument, to: selectedRange.end)
@@ -347,4 +347,21 @@ fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [U
 // Helper function inserted by Swift 4.2 migrator.
 fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
 	return input.rawValue
+}
+
+extension UITextView {
+    var numberOfLines: Int {
+        // Get number of lines
+        let numberOfGlyphs = self.layoutManager.numberOfGlyphs
+        var index = 0, numberOfLines = 0
+        var lineRange = NSRange(location: NSNotFound, length: 0)
+
+        while index < numberOfGlyphs {
+            self.layoutManager.lineFragmentRect(forGlyphAt: index, effectiveRange: &lineRange)
+          index = NSMaxRange(lineRange)
+          numberOfLines += 1
+        }
+
+        return numberOfLines
+    }
 }
